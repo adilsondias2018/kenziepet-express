@@ -9,17 +9,12 @@ import { User } from '../../entities/User';
 export const login = async(req: Request, res: Response) =>{
 
     const userRepository = getRepository(User)    
-    const {username, passaword} = req.body
+    const {username, password} = req.body   
+    const user = await userRepository.findOne({where: {username}});    
 
-    console.log(username, passaword)
-
-    const user = await userRepository.findOne({where: {username}});
-
-    console.log(user)
-
-    if(!user) return res.sendStatus(404)   
+    if(!user) return res.sendStatus(404)  
         
-    if(!bcrypt.compareSync(passaword, user.passaword)) return res.sendStatus(401)
+    if(!bcrypt.compareSync(password, user.password)) return res.sendStatus(401)
 
     const token = jwt.sign({id: user.id},'secret')
 

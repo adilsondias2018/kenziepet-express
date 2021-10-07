@@ -10,7 +10,7 @@ export class Group {
     @Column()
     scientific_name!: string
 
-    @OneToMany(() => Animal, animal => animal.groups)
+    @OneToMany(() => Animal, animal => animal.groups, )
     animals!: Animal
 
 }

@@ -41,6 +41,7 @@ export const update = async (req:Request, res: Response) =>{
     const groupUpdate: Group | undefined = await groupRepository.findOne(req.params.groupId)
     res.send(groupUpdate);
 }
+
 export const destroy = async (req:Request, res: Response) =>{
     const groupRepository = getRepository(Group);
     const group: Group | undefined = await groupRepository.findOne(req.params.groupId)

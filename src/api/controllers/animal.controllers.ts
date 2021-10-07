@@ -22,7 +22,7 @@ export const create =  async (req: Request, res: Response) =>{
 
     animal.name = requestBody.name
     animal.age = requestBody.age
-    animal.weigh = requestBody.weigh
+    animal.weight = requestBody.weigh
     animal.sex = requestBody.sex
     // animal.groups.name = requestBody.group.name
     // animal.groups.scientific_name = requestBody.group.scientific_name
@@ -44,17 +44,71 @@ export const list = async (req:Request, res: Response) =>{
       // Pegando a models
       const animalRepository = getRepository(Animal)
     
-      const animals: Array<Animal> = await animalRepository.find({
+      const animal: Array<Animal> = await animalRepository.find({
         relations: ['characteristics']
       })
-      res.send(animals);
+      res.send(animal);
 }
-export const update = (req:Request, res: Response) =>{
-    res.send('Update');
+export const update = async (req:Request, res: Response) =>{
+
+    const animalRepository = getRepository(Animal)
+    const animal: Animal | undefined = await animalRepository.findOne(req.params.animalId)
+    console.log(animal)
+    if( animal === undefined){
+        return res.status(404).send({error: 'Not Found'})
+    }
+    // console.log(req.body)
+    // const updateRes = await animalRepository.update(animal.id, {...req.body})
+
+
+    const requestBody = req.body
+    
+
+    animal.name = requestBody.name
+    animal.age = requestBody.age
+    animal.weight = requestBody.weigh
+    animal.sex = requestBody.sex
+    // animal.groups.name = requestBody.group.name
+    // animal.groups.scientific_name = requestBody.group.scientific_name
+
+    const groups = await createGroup(requestBody.group)
+
+    // console.log(requestBody.group)
+    const characteristics = await createCharacteristics(requestBody.characteristics)
+    animal.groups = groups
+    animal.characteristics = characteristics
+    
+
+    const createAnimal = await animalRepository.save(animal)
+
+    res.status(201).send(createAnimal)
+
+    // console.log("Erro",updateRes)
+
+    // const animalUpdate: Animal | undefined = await animalRepository.findOne(req.params.animalId)
+
+    // res.status(204).send(animalUpdate);
 }
-export const destroy = (req:Request, res: Response) =>{
-    res.send('Destroy');
+export const destroy = async (req:Request, res: Response) =>{
+    const animalRepository = getRepository(Animal)
+    const animal: Animal | undefined = await animalRepository.findOne(req.params.animalId)
+
+    if( animal === undefined){
+        return res.status(404).send({error: 'Not Found'})
+    }
+
+    const temp = await animalRepository.delete(req.params.animalId)
+    res.status(204).send(temp);
 }
-export const retrieve = (req:Request, res: Response) =>{
-    res.send('Filter');
+export const retrieve = async (req:Request, res: Response) =>{
+    const animalRepository = getRepository(Animal)
+    const animal:Animal | undefined = await animalRepository.findOne(req.params.animalId)
+
+    console.log(req.params.animalsId)
+
+    if (animal === undefined){
+        return res.send({error: 'Not Found'}).status(404)
+    }
+    
+    res.status(201).send(animal)
 }

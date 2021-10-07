@@ -10,16 +10,18 @@ export class Animal {
     @Column()
     age!:number
     @Column()
-    weigh!: number
+    weight!: number
     @Column()
     sex!:string
 
-    @ManyToMany(() => Characteristic, characteristic => characteristic.animals)
+    @ManyToMany(() => Characteristic, characteristic => characteristic.animals, {
+        eager: true
+    })
     @JoinTable() // Obrigatório se a relação for M:M ou ManyToMany
     characteristics!: Characteristic[]
 
-    @ManyToOne(() => Group, group => group.animals)
+    @ManyToOne(() => Group, group => group.animals, {
+        eager: true
+    })
     groups!: Group
-
-
 }

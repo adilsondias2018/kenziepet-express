@@ -8,7 +8,9 @@ export class User {
     @Column()
     username!: string
     @Column()
-    passaword!: string
+    password!: string
+    @Column()
+    is_superuser!: boolean
 
     
     constructor(data: Partial<User>){
@@ -18,7 +20,7 @@ export class User {
     @BeforeInsert()
     @BeforeUpdate()
     hashPassword(){
-        this.passaword = bcrypt.hashSync(this.passaword, 8)
+        this.password = bcrypt.hashSync(this.password, 8)
     }
 
 }

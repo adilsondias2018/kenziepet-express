@@ -9,7 +9,9 @@ export class Characteristic {
     name!: string
 
     // Opcional utilizado para fazer o Many to Many bidirecional 
-    @ManyToMany(() => Animal, animal => animal.characteristics)
+    @ManyToMany(() => Animal, animal => animal.characteristics,{
+        cascade: true
+    })
     animals!: Animal
 
 }

@@ -8,7 +8,7 @@ export const animalValidator = (req: Request, res: Response, next: NextFunction)
        return next()
     }else{
 
-        return res.status(400).send('Invalid/Missing Movie')
+        return res.status(400)
     }
 
 }
